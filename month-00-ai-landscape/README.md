@@ -78,7 +78,7 @@ three tools: 1. OpenAI SDK 2. LangChain 3. LlamaIndex
 ### OpenAI SDK
 
 OpenAI SDK is official programming library that helps to talk to OpenAI
-APIs wuthout making HTTP requests.
+APIs without making HTTP requests.
 
 #### Architecture
 
@@ -211,14 +211,14 @@ With LlamaIndex:
 #### Architecture
 
 ``` text
-Your Documents
-        ↓
-   LlamaIndex
-        ↓
+  Your Documents
+         ↓
+     LlamaIndex
+         ↓
 Relevant Information
-        ↓
+         ↓
     OpenAI SDK
-        ↓
+         ↓
      GPT Model
 ```
 
@@ -231,8 +231,17 @@ They are complementary, not competitors.
 
 A common architecture is:
 
-User ↓ LangChain (workflow) ↓ LlamaIndex (retrieve relevant documents) ↓
-OpenAI SDK ↓ GPT
+``` text
+                User 
+                  ↓ 
+    LangChain (workflow) 
+                  ↓ 
+LlamaIndex (retrieve relevant documents) 
+                  ↓
+             OpenAI SDK 
+                  ↓ 
+                 GPT
+```
 
 #### Key Takeaway
 
