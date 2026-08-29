@@ -5,12 +5,12 @@ AI applications.
 
 To structure my learning, I am following the four-layer AI stack:
 
-1.  [Foundation Layer (Models)](#foundation-layer----models)
+1.  [Foundation Layer (Models)](#foundation-layer---models)
 2.  [Retrieval Layer](#retrieval-layer)
 3.  Orchestration Layer
 4.  Application Layer
 
-## Foundation Layer -- Models
+## Foundation Layer - Models
 
 To understand the foundation layer, I signed up for multiple model
 providers:
@@ -94,12 +94,12 @@ three tools:
 2. LangChain 
 3. LlamaIndex
 
-### OpenAI SDK
+#### OpenAI SDK
 
 OpenAI SDK is official programming library that helps to talk to OpenAI
 APIs without making HTTP requests.
 
-#### Architecture
+##### Architecture
 
 ``` text
 Your Application
@@ -112,13 +112,13 @@ Your Application
 This SDK makes interaction with OpenAI models easy and reliable from
 code.
 
-### LangChain:
+#### LangChain:
 
 LangChain is an orchestration framework for building LLM applications.
 It is model agnostic and can work with many providers like OpenAI,
 Anthropic, Google Gemini, etc.
 
-#### Building Blocks
+##### Building Blocks
 
 LangChain provides reusable building blocks to connect into one larger
 AI workflow:
@@ -150,7 +150,7 @@ plumbing yourself, it gives you ready-made building blocks to connect
 models, prompts, tools, memory, and application logic into a single
 workflow.
 
-#### Simple way to think about it
+##### Simple way to think about it
 
 > **The OpenAI SDK helps you talk to an AI model. LangChain helps you
 > build an entire AI application around that model.**
@@ -173,7 +173,7 @@ than on the underlying plumbing.
 That's the real value of LangChain---it doesn't make the AI smarter, it
 makes building AI applications easier.
 
-### LlamaIndex
+#### LlamaIndex
 
 Unlike LangChain, which helps you orchestrate AI workflows, LlamaIndex
 focuses on one specific problem: helping LLMs use your own data.
@@ -227,7 +227,7 @@ With LlamaIndex:
 3.  Sends just that section to GPT.
 4.  GPT generates the answer.
 
-#### Architecture
+##### Architecture
 
 ``` text
   Your Documents
@@ -241,7 +241,7 @@ Relevant Information
      GPT Model
 ```
 
-#### Relationship with LangChain
+##### Relationship with LangChain
 
 They are complementary, not competitors.
 
@@ -262,7 +262,7 @@ LlamaIndex (retrieve relevant documents)
                  GPT
 ```
 
-#### Key Takeaway
+##### Key Takeaway
 
 LlamaIndex specializes in retrieval. It helps AI applications
 efficiently search your own data and provide only the most relevant
@@ -270,7 +270,7 @@ information to the LLM, making responses more accurate, faster, and
 cheaper. This is the foundation of most Retrieval-Augmented Generation
 (RAG) applications.
 
-## Conclusion
+#### Conclusion
 
 These three tools work together rather than compete with each other.
 
@@ -294,22 +294,22 @@ RAG stands for **Retrieval Augmented Generation**
 
 <img width="600" height="400" alt="Image" src="./Reference Images/RAG Overview.png" />
 
-### Understanding RAG Landscape
+#### Understanding RAG Landscape
 
 <img width="600" height="400" alt="Image" src="./Reference Images/RAG Landscape.png" />
 
-### Query Translation
+##### Query Translation
 
 This block captures bunch of different methods to take a question from a user and modify it in some way to make it better suited for retrieval from different indexes. that can use methods like
 
 1. query writing
 2. decomposing a query into constituent sub questions
 
-### Routing
+##### Routing
 
 Taking that decomposed rewritten question and routing it to right vector stores, relational DB, graph DB and a vector store. so its a challenge of getting a question to the right source.
 
-### Query construction
+##### Query construction
 
 this block takes natural language and converting it into the DSL necessary for DB we work with. 
 e.g: 
@@ -317,26 +317,26 @@ e.g:
 2. text to Cipher for graph DB
 3. text to metadata filters for vector DB
 
-### Indexing
+##### Indexing
 
 This is the process of taking documents and processing them in some way so they can be easily retrieved and there are couple of technmiques including different embedding methods and indexing strategies.
 
-### Retrieval
+##### Retrieval
 
-### Generation
+##### Generation
 
-## RAG Motivation
+#### RAG Motivation
 
 <img width="600" alt="Image" src="./Reference Images/RAG Motivation.png" />
 
-### Why RAG exist?
+##### Why RAG exist?
 An LLM has two important limitations:
 * Its trained knowledge is static and may be outdated.
 * It doesn't inherently know your private/external data such as company documents, PDFs, DBs, policies, etc.
 
 RAG addresses this by retrieving relevant information at query time and giving it to the LLM as context.
 
-#### LLM Alone
+##### LLM Alone
 
 <p align="center">
   Question<br>
@@ -346,7 +346,7 @@ RAG addresses this by retrieving relevant information at query time and giving i
   Answer
 </p>
 
-#### RAG
+##### RAG
 
 <p align="center">
   Question<br>
@@ -367,7 +367,7 @@ Main components of RAG pipeline:
 2. [Retrieval](#retrieval-1)
 3. [Generation](#Generation-1)
 
-### Indexing
+#### Indexing
 
 <img width="600"  alt="Image" src="./Reference Images/Document Loading Flowchart.png" />
 
@@ -381,7 +381,7 @@ There are lot of approaches to take text documents and compress them down to num
 
 <img width="600" height="400" alt="Image" src="./Reference Images/Statistical and machine learned representations.png" />
 
-#### Chunking
+##### Chunking
 
 Chunking is the process of splitting a large document into smaller pieces of text before creating embeddings.
 for example:
@@ -417,7 +417,7 @@ instead, if we split the document into smaller chunks, retrieval can find specif
 
 This allows us to send only the relavant information to the LLM rather than the entire document.
 
-#### Embeddings
+##### Embeddings
 
 An embedding converts text into a numerical representation (vector) that captures its semantic meaning.
 
@@ -457,13 +457,13 @@ Later, the user's question is also embedded:
   that are semantically similar
 </p>
 
-### Retrieval
+#### Retrieval
 
 Indexing process basically makes documents easy to retrieve. and that looks like, you take documents, you split it in some way so that can be easily embedded. those embedding are numerical representations of those documents which are easily searchable and then they stored in index, when given a question that's also embedded, the index performs similarity search and returns splits that are relavant to the question.
 
 <img width="600" alt="Image" src="./Reference Images/IndexMakesDocsEastToRetrieve.png">
 
-#### Retrieval powered via Similarity Search
+##### Retrieval powered via Similarity Search
 
 <img width="600" src="./Reference Images/Similarity Search Retrieval Diagram.png"/>
 
@@ -471,11 +471,11 @@ Lets say we take a document and embed it. imagine that embedding has 3 dimention
 
 So in perticular we take our documents, embed them into in this case 3D space, we take a question and do the same, then we can do search like local neighborhood search in this 3D space around our question to find what documents are nearby. and then these nearby neighbors are retrieved, because they have similar semantics relative to our question.
 
-### Generation
+#### Generation
 
 Flow is like below 
 
-#### Document Indexing Flow
+##### Document Indexing Flow
 <p align="center">
   Take document<br>
   ↓<br>
@@ -489,7 +489,7 @@ Flow is like below
 
 <br>
 
-#### Retrieval and Answer Generation Flow
+##### Retrieval and Answer Generation Flow
 
 <p align="center">
   Embed the question to produce a similar numerical representation<br>
@@ -504,9 +504,45 @@ Flow is like below
 
 <img width="600" src="./Reference Images/Adding Documents to the Context Window.png"/>
 
-#### Connecting Retrieval to LLMs
+##### Connecting Retrieval to LLMs
 
 This introduces notion of a prompt, we can think of it as a placeholder for example in our case **Keys**, so these keys can be context and question. so we can build a doctionary from our retrieved documents and from our question and then we can populate our prompt template with the values from our dictionary and that becomes a prompt value which can be pass to LLM like a chat model, resulting in chat messages, which we can parse into a string and get our answer.
 
 <img width="600" src="./Reference Images/Connecting Retrieval to LLMs Flow.png"/>
 
+#### LangChain's Role in RAG
+
+LangChain can be used to connect the different components of a RAG pipeline into a workflow.
+
+<p align="center">
+  Documents<br>
+  ↓<br>
+  Document Loading<br>
+  ↓<br>
+  Chunking<br>
+  ↓<br>
+  Embeddings<br>
+  ↓<br>
+  Vector Store<br>
+  ↓<br>
+  Retrieval<br>
+  ↓<br>
+  Retrieved Context + User Question<br>
+  ↓<br>
+  LLM<br>
+  ↓<br>
+  Answer
+</p>
+
+LangChain provides abstractions and integrations for many of these steps, such as document loaders, text splitters, embedding models, vectore stores, retrieversm prompts and LLMs.
+
+The important distinction is RAG is an architectural pattern, while LangChain is one framework that can be used to implement a RAG application. 
+
+
+### Hands-on RAG
+
+## Orchestration Layer
+
+## Application Layer
+
+## Conclusion
