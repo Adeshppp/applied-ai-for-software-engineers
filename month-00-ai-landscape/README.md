@@ -73,7 +73,10 @@ work.
 ### Understanding the Tooling Landscape
 
 To understand which problem each tool solves, I explored the following
-three tools: 1. OpenAI SDK 2. LangChain 3. LlamaIndex
+three tools: 
+1. OpenAI SDK 
+2. LangChain 
+3. LlamaIndex
 
 ### OpenAI SDK
 
@@ -90,7 +93,7 @@ Your Application
     GPT Models
 ```
 
-This SDK makes ineracting with OpenAI models easy and reliable form
+This SDK makes interaction with OpenAI models easy and reliable from
 code.
 
 ### LangChain:
@@ -262,3 +265,122 @@ These three tools work together rather than compete with each other.
 
 Knowing what each tool is designed for makes it much easier to choose
 the right one instead of using a more complex solution than necessary.
+
+
+### Understanding Retrieval Layer
+
+to understand retrieval layer, I am following this resource: https://www.youtube.com/watch?v=sVcwVQRHIc8
+
+
+what the Retrieval Layer is, why we need it, and how the RAG pipeline works.
+
+RAG stands for **Retrieval Augmented Generation**
+
+<img width="600" height="400" alt="Image" src="./Reference Images/RAG Overview.png" />
+
+### Understanding RAG Landscape
+
+<img width="600" height="400" alt="Image" src="./Reference Images/RAG Landscape.png" />
+
+### Query Translation
+
+This block captures bunch of different methods to take a question from a user and modify it in some way to make it better suited for retrieval from different indexes. that can use methods like
+
+1. query writing
+2. decomposing a query into constituent sub questions
+
+### Routing
+
+Taking that decomposed rewritten question and routing it to right vector stores, relational DB, graph DB and a vector store. so its a challenge of getting a question to the right siource.
+
+### Query construction
+
+this block takes natural language and converting it into the DSL necessary for DB we work with. 
+e.g: 
+1. text to SQL
+2. text to Cipher for graph DB
+3. text to metadata filters for vector DB
+
+### Indexing
+
+This is the process of taking documents and processing them in some way so they can be easily retrieved and there are couple of technmiques including different embedding methods and indexing strategies.
+
+### Retrieval
+
+### Generation
+
+## RAG Motivation
+
+<img width="600" alt="Image" src="./Reference Images/RAG Motivation.png" />
+
+Main components of RAG pipeline:
+1. Indexing
+2. Retrieval
+3. Generation
+
+### Indexing
+
+<img width="600"  alt="Image" src="./Reference Images/Document Loading Flowchart.png" />
+
+First aspect of indexing is to load external documents to retriever and filter out relavant documents to a user question in some way. way to establish that relavance or relationship is done by numeric representation of documents. reason behind is that, it is easy to compare vector with numbers as compared to text.
+
+<img width="600" alt="Image" src="./Reference Images/Numerical Representation for Search.png" />
+
+There are lot of approaches to take text documents and compress them down to numeric representation that can be easily search, there are few ways to do that, they can be very easily search.
+
+
+
+<img width="600" height="400" alt="Image" src="./Reference Images/Statistical and machine learned representations.png" />
+
+### Retrieval
+
+Indexing process basically makes documents easy to retrieve. and that looks like, you take documents, you split it in some way so that can be easily embedded. those embedding are numerical representations of those documents which are easily searchable and then they stored in index, when given a question that's also embedded, the index performs similarity search and returns splits that are relavant to the question.
+
+<img width="600" alt="Image" src="./Reference Images/IndexMakesDocsEastToRetrieve.png">
+
+#### Retrieval powered via Similarity Search
+
+<img width="600" src="./Reference Images/Similarity Search Retrieval Diagram.png"/>
+
+Lets say we take a document and embed it. imagine that embedding has 3 dimentions, so each document is projected into some point in this 3D space. point is that the location in space is determined by the semantic meaning or content in this document. so documents in similar location in space contain similar semantic information. this is similar idea for a lot of search and retrieval methods that we see with modern vector stores.  
+
+So in perticular we take our documents, embed them into in this case 3D space, we take a question and do the same, then we can do search like local neighborhood search in this 3D space around our question to find what documents are nearby. and then these nearby neighbors are retrieved, because they have similar semantics relative to our question.
+
+### Generation
+
+Flow is like below 
+
+#### Document Indexing Flow
+<p align="center">
+  Take document<br>
+  ↓<br>
+  Split it for convenient embedding<br>
+  ↓<br>
+  Embed each split<br>
+  ↓<br>
+  Store embeddings in a vector store<br>
+  <i>(so they become easily searchable numerical representations)</i>
+</p>
+
+<br>
+
+#### Retrieval and Answer Generation Flow
+
+<p align="center">
+  Embed the question to produce a similar numerical representation<br>
+  ↓<br>
+  Search for similar documents in high-dimensional space based on proximity<br>
+  ↓<br>
+  Retrieve relevant splits for the question<br>
+  ↓<br>
+  Pack those splits into the context window and generate the answer
+</p>
+<br><br>
+
+<img width="600" src="./Reference Images/Adding Documents to the Context Window.png"/>
+
+#### Connecting Retrieval to LLMs
+
+This introduces notion of a prompt, we can think of it as a placeholder for example in our case **Keys**, so these keys can be context and question. so we can build a doctionary from our retrieved documents and from our question and then we can populate our prompt template with the values from our dictionary and that becomes a prompt value which can be pass to LLM like a chat model, resulting in chat messages, which we can parse into a string and get our answer.
+
+<img width="600" src="./Reference Images/Connecting Retrieval to LLMs Flow.png"/>
