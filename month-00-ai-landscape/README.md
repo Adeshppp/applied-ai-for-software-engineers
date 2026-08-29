@@ -314,9 +314,9 @@ This is the process of taking documents and processing them in some way so they 
 <img width="600" alt="Image" src="./Reference Images/RAG Motivation.png" />
 
 Main components of RAG pipeline:
-1. [Indexing](#indexing)
-2. [Retrieval](#retrieval)
-3. [Generation](#Generation)
+1. [Indexing](#indexing-1)
+2. [Retrieval](#retrieval-1)
+3. [Generation](#Generation-1)
 
 ### Indexing
 
