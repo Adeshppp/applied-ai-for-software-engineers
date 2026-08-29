@@ -5,8 +5,8 @@ AI applications.
 
 To structure my learning, I am following the four-layer AI stack:
 
-1.  Foundation Layer (Models)
-2.  Retrieval Layer
+1.  [Foundation Layer (Models)](#foundation-layer----models)
+2.  [Retrieval Layer](#retrieval-layer)
 3.  Orchestration Layer
 4.  Application Layer
 
@@ -66,9 +66,25 @@ The prompt comparisons and observations are documented in the
 
 ## Retrieval Layer
 
-In Retrieval layer, I explored tooling landscape and understand which
-problem each tool is solving. Also I investigated how existing products
-work.
+The Retrieval Layer helps an AI application find relevant information from external data sources and provide that information to an LLM as context.
+
+LLMs do not automatically have access to private, application-specific, or up-to-date information such as company documents, PDFs, databases, or knowledge bases. Instead of sending all available data to the LLM, the Retrieval Layer searches the available data and retrieves only the information relevant to the user’s question.
+
+A simple way to think about the Retrieval Layer is:
+
+<p align="center">
+  External Data<br>
+  ↓<br>
+  Retrieval Layer<br>
+  ↓<br>
+  Relevant Information<br>
+  ↓<br>
+  LLM<br>
+  ↓<br>
+  Answer
+</p>
+
+In this section, I explore the tooling landscape to understand which problems different AI tools solve. I then explore Retrieval-Augmented Generation (RAG) to understand how external information can be indexed, retrieved, and provided to an LLM for generating an answer.
 
 ### Understanding the Tooling Landscape
 
@@ -267,7 +283,7 @@ Knowing what each tool is designed for makes it much easier to choose
 the right one instead of using a more complex solution than necessary.
 
 
-### Understanding Retrieval Layer
+### Understanding Retrieval Layer / RAG
 
 to understand retrieval layer, I am following this resource: https://www.youtube.com/watch?v=sVcwVQRHIc8
 
@@ -291,7 +307,7 @@ This block captures bunch of different methods to take a question from a user an
 
 ### Routing
 
-Taking that decomposed rewritten question and routing it to right vector stores, relational DB, graph DB and a vector store. so its a challenge of getting a question to the right siource.
+Taking that decomposed rewritten question and routing it to right vector stores, relational DB, graph DB and a vector store. so its a challenge of getting a question to the right source.
 
 ### Query construction
 
@@ -313,6 +329,39 @@ This is the process of taking documents and processing them in some way so they 
 
 <img width="600" alt="Image" src="./Reference Images/RAG Motivation.png" />
 
+### Why RAG exist?
+An LLM has two important limitations:
+* Its trained knowledge is static and may be outdated.
+* It doesn't inherently know your private/external data such as company documents, PDFs, DBs, policies, etc.
+
+RAG addresses this by retrieving relevant information at query time and giving it to the LLM as context.
+
+#### LLM Alone
+
+<p align="center">
+  Question<br>
+  ↓<br>
+  LLM's existing knowledge<br>
+  ↓<br>
+  Answer
+</p>
+
+#### RAG
+
+<p align="center">
+  Question<br>
+  ↓<br>
+  Retrieve relevant external information<br>
+  ↓<br>
+  Question + Retrieved Context<br>
+  ↓<br>
+  LLM<br>
+  ↓<br>
+  Answer
+</p>
+
+The important distinction is that RAG normally does not retrain or modify the LLM. It supplies useful information in the prompt/context.
+
 Main components of RAG pipeline:
 1. [Indexing](#indexing-1)
 2. [Retrieval](#retrieval-1)
@@ -331,6 +380,82 @@ There are lot of approaches to take text documents and compress them down to num
 
 
 <img width="600" height="400" alt="Image" src="./Reference Images/Statistical and machine learned representations.png" />
+
+#### Chunking
+
+Chunking is the process of splitting a large document into smaller pieces of text before creating embeddings.
+for example:
+
+<p align="center">
+  Employee Handbook<br>
+  ↓<br>
+  Chunking<br>
+  ↓<br>
+  Chunk 1: Vacation Policy<br>
+  Chunk 2: Sick Leave Policy<br>
+  Chunk 3: Health Insurance<br>
+  Chunk 4: Remote Work Policy<br>
+  ↓<br>
+  Create an embedding for each chunk<br>
+  ↓<br>
+  Vector Store
+</p>
+
+**Why do we chunk?**<br>
+Imagine storing 100 page employee handbook as one embedding.then someone asks: "How many vacation days do employee get?". the entire handbook would be represented as one large piece, even though only a small section contains the answer.
+
+instead, if we split the document into smaller chunks, retrieval can find specifically:
+
+<p align="center">
+  Question:<br>
+  "How many vacation days do employees get?"<br>
+  ↓<br>
+  Similarity Search<br>
+  ↓<br>
+  Chunk 1: Vacation Policy ← Relevant
+</p>
+
+This allows us to send only the relavant information to the LLM rather than the entire document.
+
+#### Embeddings
+
+An embedding converts text into a numerical representation (vector) that captures its semantic meaning.
+
+The important concept is that embeddings allow us to compare text based on meaning rather than just matching exact words.
+
+For example:
+
+<p align="center">
+  <strong>User Question:</strong><br>
+  "How much PTO do employees get?"<br>
+  ↓<br>
+  <strong>Relevant Document Chunk:</strong><br>
+  "Employees receive 15 days of paid vacation annually."
+</p>
+
+These sentences don't share many exact words, but they have related meanings. Their embeddings should therefore be relatively close in vector space.
+
+<p align="center">
+  Text<br>
+  ↓<br>
+  Embedding Model<br>
+  ↓<br>
+  Vector (Numerical Representation)<br>
+  ↓<br>
+  Stored in Vector Store
+</p>
+
+Later, the user's question is also embedded:
+<p align="center">
+  Question<br>
+  ↓<br>
+  Embedding<br>
+  ↓<br>
+  Similarity Search<br>
+  ↓<br>
+  Find document embeddings<br>
+  that are semantically similar
+</p>
 
 ### Retrieval
 
@@ -384,3 +509,4 @@ Flow is like below
 This introduces notion of a prompt, we can think of it as a placeholder for example in our case **Keys**, so these keys can be context and question. so we can build a doctionary from our retrieved documents and from our question and then we can populate our prompt template with the values from our dictionary and that becomes a prompt value which can be pass to LLM like a chat model, resulting in chat messages, which we can parse into a string and get our answer.
 
 <img width="600" src="./Reference Images/Connecting Retrieval to LLMs Flow.png"/>
+
