@@ -97,13 +97,11 @@ APIs without making HTTP requests.
 
 ##### Architecture
 
-<p align="center">
-  Your Application<br>
-  ↓<br>
-  OpenAI SDK<br>
-  ↓<br>
-  GPT Models
-</p>
+```mermaid
+flowchart TD
+    A[Your Application] --> B[OpenAI SDK]
+    B --> C[GPT Models]
+```
 
 This SDK makes interaction with OpenAI models easy and reliable from
 code.
@@ -225,17 +223,13 @@ With LlamaIndex:
 
 ##### Architecture
 
-<p align="center">
-  Your Documents<br>
-  ↓<br>
-  LlamaIndex<br>
-  ↓<br>
-  Relevant Information<br>
-  ↓<br>
-  OpenAI SDK<br>
-  ↓<br>
-  GPT Model
-</p>
+```mermaid
+flowchart TD
+    A[Your Documents] --> B[LlamaIndex]
+    B --> C[Relevant Information]
+    C --> D[OpenAI SDK]
+    D --> E[GPT Model]
+```
 ##### Relationship with LangChain
 
 They are complementary, not competitors.
@@ -245,16 +239,12 @@ They are complementary, not competitors.
 
 A common architecture is:
 
-``` text
-                                        User 
-                                          ↓ 
-                            LangChain (workflow) 
-                                          ↓ 
-                        LlamaIndex (retrieve relevant documents) 
-                                          ↓
-                                    OpenAI SDK 
-                                          ↓ 
-                                        GPT
+```mermaid
+flowchart TD
+    A[User] --> B[LangChain - workflow]
+    B --> C[LlamaIndex - retrieve relevant documents]
+    C --> D[OpenAI SDK]
+    D --> E[GPT]
 ```
 
 ##### Key Takeaway
@@ -331,29 +321,34 @@ An LLM has two important limitations:
 
 RAG addresses this by retrieving relevant information at query time and giving it to the LLM as context.
 
-##### LLM Alone
+#### LLM Alone vs. RAG
 
-<p align="center">
-  Question<br>
-  ↓<br>
-  LLM's existing knowledge<br>
-  ↓<br>
-  Answer
-</p>
+```mermaid
+%%{init: {
+  "flowchart": {
+    "subGraphTitleMargin": {"top": 12, "bottom": 0},
+    "rankSpacing": 25
+  }
+}}%%
 
-##### RAG
+flowchart LR
 
-<p align="center">
-  Question<br>
-  ↓<br>
-  Retrieve relevant external information<br>
-  ↓<br>
-  Question + Retrieved Context<br>
-  ↓<br>
-  LLM<br>
-  ↓<br>
-  Answer
-</p>
+    subgraph A["LLM Alone"]
+        direction TB
+        A1[Question] --> A2[LLM's existing knowledge]
+        A2 --> A3[Answer]
+    end
+
+    subgraph B["RAG"]
+        direction TB
+        B1[Question] --> B2[Retrieve relevant external information]
+        B2 --> B3[Question + Retrieved Context]
+        B3 --> B4[LLM]
+        B4 --> B5[Answer]
+    end
+
+    A ~~~ B
+```
 
 The important distinction is that RAG normally does not retrain or modify the LLM. It supplies useful information in the prompt/context.
 
@@ -381,34 +376,34 @@ There are lot of approaches to take text documents and compress them down to num
 Chunking is the process of splitting a large document into smaller pieces of text before creating embeddings.
 for example:
 
-<p align="center">
-  Employee Handbook<br>
-  ↓<br>
-  Chunking<br>
-  ↓<br>
-  Chunk 1: Vacation Policy<br>
-  Chunk 2: Sick Leave Policy<br>
-  Chunk 3: Health Insurance<br>
-  Chunk 4: Remote Work Policy<br>
-  ↓<br>
-  Create an embedding for each chunk<br>
-  ↓<br>
-  Vector Store
-</p>
+
+```mermaid
+flowchart TD
+    A[Employee Handbook] --> B[Chunking]
+    B --> C1[Chunk 1: Vacation Policy]
+    B --> C2[Chunk 2: Sick Leave Policy]
+    B --> C3[Chunk 3: Health Insurance]
+    B --> C4[Chunk 4: Remote Work Policy]
+
+    C1 --> D[Create an embedding for each chunk]
+    C2 --> D
+    C3 --> D
+    C4 --> D
+
+    D --> E[Vector Store]
+```
 
 **Why do we chunk?**<br>
 Imagine storing 100 page employee handbook as one embedding.then someone asks: "How many vacation days do employee get?". the entire handbook would be represented as one large piece, even though only a small section contains the answer.
 
 instead, if we split the document into smaller chunks, retrieval can find specifically:
 
-<p align="center">
-  Question:<br>
-  "How many vacation days do employees get?"<br>
-  ↓<br>
-  Similarity Search<br>
-  ↓<br>
-  Chunk 1: Vacation Policy ← Relevant
-</p>
+```mermaid
+flowchart TD
+    A["Question:<br/>How many vacation days do employees get?"]
+    A --> B[Similarity Search]
+    B --> C["Chunk 1: Vacation Policy<br/>Relevant"]
+```
 
 This allows us to send only the relavant information to the LLM rather than the entire document.
 
@@ -471,30 +466,25 @@ So in perticular we take our documents, embed them into in this case 3D space, w
 Flow is like below 
 
 ##### Document Indexing Flow
-<p align="center">
-  Take document<br>
-  ↓<br>
-  Split it for convenient embedding<br>
-  ↓<br>
-  Embed each split<br>
-  ↓<br>
-  Store embeddings in a vector store<br>
-  <i>(so they become easily searchable numerical representations)</i>
-</p>
+```mermaid
+flowchart TD
+    A[Take document] --> B[Split it for convenient embedding]
+    B --> C[Embed each split]
+    C --> D[Store embeddings in a vector store]
+    D --> E["So they become easily searchable<br/>numerical representations"]
+```
 
 <br>
 
 ##### Retrieval and Answer Generation Flow
 
-<p align="center">
-  Embed the question to produce a similar numerical representation<br>
-  ↓<br>
-  Search for similar documents in high-dimensional space based on proximity<br>
-  ↓<br>
-  Retrieve relevant splits for the question<br>
-  ↓<br>
-  Pack those splits into the context window and generate the answer
-</p>
+```mermaid
+flowchart TD
+    A[Embed the question to produce a similar numerical representation]
+    A --> B[Search for similar documents in high-dimensional space based on proximity]
+    B --> C[Retrieve relevant splits for the question]
+    C --> D[Pack those splits into the context window and generate the answer]
+```
 <br><br>
 
 <img width="600" src="./Reference Images/Adding Documents to the Context Window.png"/>
@@ -509,25 +499,17 @@ This introduces notion of a prompt, we can think of it as a placeholder for exam
 
 LangChain can be used to connect the different components of a RAG pipeline into a workflow.
 
-<p align="center">
-  Documents<br>
-  ↓<br>
-  Document Loading<br>
-  ↓<br>
-  Chunking<br>
-  ↓<br>
-  Embeddings<br>
-  ↓<br>
-  Vector Store<br>
-  ↓<br>
-  Retrieval<br>
-  ↓<br>
-  Retrieved Context + User Question<br>
-  ↓<br>
-  LLM<br>
-  ↓<br>
-  Answer
-</p>
+```mermaid
+flowchart TD
+    A[Documents] --> B[Document Loading]
+    B --> C[Chunking]
+    C --> D[Embeddings]
+    D --> E[Vector Store]
+    E --> F[Retrieval]
+    F --> G[Retrieved Context + User Question]
+    G --> H[LLM]
+    H --> I[Answer]
+```
 
 LangChain provides abstractions and integrations for many of these steps, such as document loaders, text splitters, embedding models, vectore stores, retrieversm prompts and LLMs.
 
