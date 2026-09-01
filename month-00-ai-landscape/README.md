@@ -72,17 +72,13 @@ LLMs do not automatically have access to private, application-specific, or up-to
 
 A simple way to think about the Retrieval Layer is:
 
-<p align="center">
-  External Data<br>
-  ↓<br>
-  Retrieval Layer<br>
-  ↓<br>
-  Relevant Information<br>
-  ↓<br>
-  LLM<br>
-  ↓<br>
-  Answer
-</p>
+```mermaid
+flowchart TD
+    A[External Data] --> B[Retrieval Layer]
+    B --> C[Relevant Information]
+    C --> D[LLM]
+    D --> E[Answer]
+```
 
 In this section, I explore the tooling landscape to understand which problems different AI tools solve. I then explore Retrieval-Augmented Generation (RAG) to understand how external information can be indexed, retrieved, and provided to an LLM for generating an answer.
 
@@ -101,13 +97,13 @@ APIs without making HTTP requests.
 
 ##### Architecture
 
-``` text
-Your Application
-        ↓
-   OpenAI SDK
-        ↓
-    GPT Models
-```
+<p align="center">
+  Your Application<br>
+  ↓<br>
+  OpenAI SDK<br>
+  ↓<br>
+  GPT Models
+</p>
 
 This SDK makes interaction with OpenAI models easy and reliable from
 code.
@@ -229,18 +225,17 @@ With LlamaIndex:
 
 ##### Architecture
 
-``` text
-  Your Documents
-         ↓
-     LlamaIndex
-         ↓
-Relevant Information
-         ↓
-    OpenAI SDK
-         ↓
-     GPT Model
-```
-
+<p align="center">
+  Your Documents<br>
+  ↓<br>
+  LlamaIndex<br>
+  ↓<br>
+  Relevant Information<br>
+  ↓<br>
+  OpenAI SDK<br>
+  ↓<br>
+  GPT Model
+</p>
 ##### Relationship with LangChain
 
 They are complementary, not competitors.
@@ -251,15 +246,15 @@ They are complementary, not competitors.
 A common architecture is:
 
 ``` text
-                User 
-                  ↓ 
-    LangChain (workflow) 
-                  ↓ 
-LlamaIndex (retrieve relevant documents) 
-                  ↓
-             OpenAI SDK 
-                  ↓ 
-                 GPT
+                                        User 
+                                          ↓ 
+                            LangChain (workflow) 
+                                          ↓ 
+                        LlamaIndex (retrieve relevant documents) 
+                                          ↓
+                                    OpenAI SDK 
+                                          ↓ 
+                                        GPT
 ```
 
 ##### Key Takeaway
