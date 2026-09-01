@@ -415,37 +415,28 @@ The important concept is that embeddings allow us to compare text based on meani
 
 For example:
 
-<p align="center">
-  <strong>User Question:</strong><br>
-  "How much PTO do employees get?"<br>
-  ↓<br>
-  <strong>Relevant Document Chunk:</strong><br>
-  "Employees receive 15 days of paid vacation annually."
-</p>
+```mermaid
+flowchart TD
+    A["User Question:<br/>How much PTO do employees get?"]
+    A --> B["Relevant Document Chunk:<br/>Employees receive 15 days of paid vacation annually."]
+```
 
 These sentences don't share many exact words, but they have related meanings. Their embeddings should therefore be relatively close in vector space.
 
-<p align="center">
-  Text<br>
-  ↓<br>
-  Embedding Model<br>
-  ↓<br>
-  Vector (Numerical Representation)<br>
-  ↓<br>
-  Stored in Vector Store
-</p>
+```mermaid
+flowchart TD
+    A[Text] --> B[Embedding Model]
+    B --> C[Vector - Numerical Representation]
+    C --> D[Stored in Vector Store]
+```
 
 Later, the user's question is also embedded:
-<p align="center">
-  Question<br>
-  ↓<br>
-  Embedding<br>
-  ↓<br>
-  Similarity Search<br>
-  ↓<br>
-  Find document embeddings<br>
-  that are semantically similar
-</p>
+```mermaid
+flowchart TD
+    A[Question] --> B[Embedding]
+    B --> C[Similarity Search]
+    C --> D["Find document embeddings<br/>that are semantically similar"]
+```
 
 #### Retrieval
 
@@ -516,9 +507,27 @@ LangChain provides abstractions and integrations for many of these steps, such a
 The important distinction is RAG is an architectural pattern, while LangChain is one framework that can be used to implement a RAG application. 
 
 
-### Hands-on RAG
+### Key Takeaways
+
+- The Retrieval Layer helps AI applications find relevant external information before sending it to an LLM.
+- RAG combines retrieval with generation so the model can answer using external or private knowledge.
+- The core RAG pipeline is: indexing → retrieval → generation.
+- Chunking and embeddings make documents easier to search.
+- Vector stores and similarity search help find semantically relevant information.
+- RAG is an architectural pattern; tools like LangChain and LlamaIndex can help implement parts of it.
+
+### What I Learned
+
+- I understand why the Retrieval Layer is needed.
+- I understand how documents are chunked, embedded, and stored for retrieval.
+- I understand how similarity search retrieves relevant context.
+- I understand how retrieved context is passed to an LLM to generate an answer.
+- I understand the roles of LangChain, LlamaIndex, and the OpenAI SDK in this ecosystem.
 
 ## Orchestration Layer
+
+To understand Orchestration layer, I am going to follow AI Agents in LangGraph course on DeppLearning.AI.
+
 
 ## Application Layer
 
